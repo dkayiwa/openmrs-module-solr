@@ -40,13 +40,6 @@
 		<filter-name>SolrRequestFilter</filter-name> 
 		<url-pattern>/dataimport</url-pattern> 
 	</filter-mapping>
-	
-	<!-- Maps hibernate file's, if present -->
-	<mappingFiles>
-				
-		BasicExample.hbm.xml
-				
-	</mappingFiles>
 
 	<!-- Internationalization -->
 	<!-- All message codes should start with ${project.parent.artifactId}. -->
