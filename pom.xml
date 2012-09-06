@@ -7,7 +7,7 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Solr Module</name>
-	<description>A Solr module</description>
+	<description>A module that uses SOLR to index all available data on a patient and provide amazingly fast access to that data for other modules</description>
 	<url>https://wiki.openmrs.org/display/docs/Solr+Module+Module</url>
 	
 	<developers>

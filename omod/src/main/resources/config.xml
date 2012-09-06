@@ -30,6 +30,15 @@
 		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.ChartSearchTabExt</class>
 	</extension>
 	
+	<dwr>
+		<allow>
+			<create creator="new" javascript="DWRChartSearchService">
+				<param name="class" value="${project.parent.groupId}.${project.parent.artifactId}.web.DWRChartSearchService"/>
+				<include method="findCountAndConcepts" />
+			</create>
+		</allow>
+	</dwr>
+	
 	<!-- Filter definitions -->
 	
 	<filter>

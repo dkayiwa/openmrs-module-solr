@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * The Chart Search controller.
@@ -37,9 +38,17 @@ public class ChartSearchController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
+	@RequestMapping(value="/module/solr/chartSearch", method = RequestMethod.GET)
+	public ModelAndView showForm() { 				
+		ModelAndView model = new ModelAndView("/module/solr/chartSearch");
+		return model;
+	}	
+	
 	@RequestMapping(value = "/module/solr/chartSearch", method = RequestMethod.POST)
-	public String chartSearch(@RequestParam(value = "patientId", required = true) Integer patientId,
+	public ModelAndView chartSearch(@RequestParam(value = "patientId", required = true) Integer patientId,
 	                          HttpServletRequest request) throws Exception {
+		
+		ModelAndView model = new ModelAndView("/module/solr/chartSearch");
 		
 		String searchText = request.getParameter("searchText") + " AND person_id:" + patientId;
 		
@@ -56,6 +65,6 @@ public class ChartSearchController {
 			//load this obs from the database using its id
 		}
 		
-		return null;
+		return model;
 	}
 }

@@ -13,9 +13,16 @@
  */
 package org.openmrs.module.solr;
 
+import java.io.File;
+import java.net.URL;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.Activator;
+import org.openmrs.util.OpenmrsClassLoader;
+import org.openmrs.util.OpenmrsUtil;
 
 /**
  * This class contains the logic that is run every time this module is either started or stopped.
@@ -29,6 +36,22 @@ public class SolrActivator implements Activator {
 	 */
 	public void startup() {
 		log.info("Starting Solr Module");
+		
+		try {
+			//Get the solr home folder
+			String solrHome = Context.getAdministrationService().getGlobalProperty("solr.home",
+			    new File(OpenmrsUtil.getApplicationDataDirectory(), "solr").getAbsolutePath());
+			
+			//If user has not setup solr config folder, set them a default one
+			if (!new File(solrHome + File.separatorChar + "conf").exists()) {
+				URL url = OpenmrsClassLoader.getInstance().getResource("conf");
+				File file = new File(url.getFile());
+				FileUtils.copyDirectoryToDirectory(file, new File(solrHome));
+			}
+		}
+		catch (Exception ex) {
+			log.error("Failed to copy Solr config folder", ex);
+		}
 	}
 	
 	/**
