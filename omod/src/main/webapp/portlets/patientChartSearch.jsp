@@ -8,25 +8,26 @@
 <script type="text/javascript">
 	var lastSearch;
 	$j(document).ready(function() {
-		new OpenmrsSearch("findConcept", true, doConceptSearch, doSelectionHandler, 
+		new OpenmrsSearch("patientChart", true, doConceptSearch, doSelectionHandler, 
 				[{fieldName:"name", header:" "}, {fieldName:"preferredName", header:" "}],
 				{searchLabel: '<spring:message code="Concept.search" javaScriptEscape="true"/>',
                     searchPlaceholder:'<spring:message code="Concept.search.placeholder" javaScriptEscape="true"/>',
 					includeVoidedLabel: '<spring:message code="SearchResults.includeRetired" javaScriptEscape="true"/>', 
 					columnRenderers: [nameColumnRenderer, null], 
 					columnVisibility: [true, false],
-					searchPhrase:'<request:parameter name="phrase"/>',
+					searchPhrase:'<request:parameter name="searchPhrase"/>',
 					showIncludeVerbose: true,
 					verboseHandler: doGetVerbose
 				});
 	});
 	
 	function doSelectionHandler(index, data) {
-		document.location = "admin/observations/obs.form?obsId=" + data.conceptId;
+		document.location = "admin/observations/obs.form?obsId=" + data.conceptId + "&=searchPhrase=" + lastSearch;
 	}
 	
 	//searchHandler
 	function doConceptSearch(text, resultHandler, getMatchCount, opts) {
+		lastSearch = text;
 		DWRChartSearchService.findCountAndConcepts(${model.patient.patientId}, text, opts.includeVoided, null, null, null, null, opts.start, opts.length, getMatchCount, resultHandler);
 	}
 	
@@ -51,7 +52,7 @@
 <div>
 	<b class="boxHeader"><spring:message code="Concept.find"/></b>
 	<div class="box">
-		<div class="searchWidgetContainer" id="findConcept"></div>
+		<div class="searchWidgetContainer" id="patientChart"></div>
 	</div>
 </div>
 	
