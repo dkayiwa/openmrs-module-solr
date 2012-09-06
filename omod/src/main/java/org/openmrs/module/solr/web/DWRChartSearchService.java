@@ -199,6 +199,7 @@ public class DWRChartSearchService {
 	
 	private Long getDocumentListCount(Integer patientId, String searchText) throws Exception {
 		SolrQuery query = new SolrQuery("*" + searchText + "* AND person_id:" + patientId);
+		query.setRows(0); //Intentionally setting to this value such that we get the count very quickly.
 		QueryResponse response = SolrEngine.getInstance().getServer().query(query);
 		return response.getResults().getNumFound();
 	}
