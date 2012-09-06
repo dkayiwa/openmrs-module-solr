@@ -22,7 +22,7 @@
 	});
 	
 	function doSelectionHandler(index, data) {
-		document.location = "concept.htm?conceptId=" + data.conceptId;
+		document.location = "admin/observations/obs.form?obsId=" + data.conceptId;
 	}
 	
 	//searchHandler

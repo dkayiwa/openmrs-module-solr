@@ -67,10 +67,10 @@ public class DWRChartSearchService {
 		try {
 			if (!StringUtils.isBlank(phrase)) {
 				
-				int matchCount = 0;
+				long matchCount = 0;
 				if (getMatchCount) {
 					//get the count of matches
-					matchCount += getDocumentList(patientId, phrase).getNumFound();
+					matchCount += getDocumentListCount(patientId, phrase);
 				}
 				
 				//if we have any matches or this isn't the first ajax call when the caller
@@ -143,7 +143,7 @@ public class DWRChartSearchService {
 			if (!StringUtils.isBlank(phrase)) {				
 				// perform the search
 				//searchResults.addAll(getDocumentList(patientId, phrase));
-				SolrDocumentList documents = getDocumentList(patientId, phrase);
+				SolrDocumentList documents = getDocumentList(patientId, phrase, start, length);
 				for (SolrDocument document : documents) {
 					Integer obsId = (Integer) document.get("obs_id");
 					Integer person_id = (Integer) document.get("person_id");
@@ -189,9 +189,17 @@ public class DWRChartSearchService {
 		return objectList;
 	}
 	
-	private SolrDocumentList getDocumentList(Integer patientId, String searchText) throws Exception {
-		SolrQuery query = new SolrQuery(searchText + " AND person_id:" + patientId);
+	private SolrDocumentList getDocumentList(Integer patientId, String searchText, Integer start, Integer length) throws Exception {
+		SolrQuery query = new SolrQuery("*" + searchText + "* AND person_id:" + patientId);
+		query.setStart(start);
+		query.setRows(length);
 		QueryResponse response = SolrEngine.getInstance().getServer().query(query);
 		return response.getResults();
+	}
+	
+	private Long getDocumentListCount(Integer patientId, String searchText) throws Exception {
+		SolrQuery query = new SolrQuery("*" + searchText + "* AND person_id:" + patientId);
+		QueryResponse response = SolrEngine.getInstance().getServer().query(query);
+		return response.getResults().getNumFound();
 	}
 }
