@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -198,9 +199,12 @@ public class DWRChartSearchService {
 	}
 	
 	private Long getDocumentListCount(Integer patientId, String searchText) throws Exception {
+		SolrServer solrServer = SolrEngine.getInstance().getServer();
+		solrServer.commit(); //Just incase there is imported data which is not yet commited.
+		
 		SolrQuery query = new SolrQuery("*" + searchText + "* AND person_id:" + patientId);
 		query.setRows(0); //Intentionally setting to this value such that we get the count very quickly.
-		QueryResponse response = SolrEngine.getInstance().getServer().query(query);
+		QueryResponse response = solrServer.query(query);
 		return response.getResults().getNumFound();
 	}
 }
